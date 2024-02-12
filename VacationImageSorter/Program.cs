@@ -2,6 +2,7 @@ namespace VacationImageSorter
 {
     internal static class Program
     {
+        public static string[] validFileTypes = { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg" };
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>

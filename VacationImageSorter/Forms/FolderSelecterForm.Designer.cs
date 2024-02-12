@@ -30,14 +30,15 @@
         {
             srcLbl = new Label();
             destLbl = new Label();
-            srcTB = new TextBox();
-            destTB = new TextBox();
+            destSelectLbl = new Label();
+            srcSelectLbl = new Label();
+            sortBtn = new Button();
             SuspendLayout();
             // 
             // srcLbl
             // 
             srcLbl.AutoSize = true;
-            srcLbl.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            srcLbl.Font = new Font("Segoe UI", 15F);
             srcLbl.Location = new Point(12, 9);
             srcLbl.Name = "srcLbl";
             srcLbl.Size = new Size(133, 28);
@@ -47,41 +48,53 @@
             // destLbl
             // 
             destLbl.AutoSize = true;
-            destLbl.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
+            destLbl.Font = new Font("Segoe UI", 15F);
             destLbl.Location = new Point(12, 58);
             destLbl.Name = "destLbl";
             destLbl.Size = new Size(173, 28);
             destLbl.TabIndex = 1;
             destLbl.Text = "Destination Folder";
             // 
-            // srcTB
+            // destSelectLbl
             // 
-            srcTB.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
-            srcTB.Location = new Point(191, 6);
-            srcTB.Name = "srcTB";
-            srcTB.PlaceholderText = "Select";
-            srcTB.ReadOnly = true;
-            srcTB.Size = new Size(480, 34);
-            srcTB.TabIndex = 1;
-            srcTB.Click += srcTB_Click;
+            destSelectLbl.BackColor = SystemColors.ControlDark;
+            destSelectLbl.Font = new Font("Segoe UI", 15F);
+            destSelectLbl.Location = new Point(191, 58);
+            destSelectLbl.Name = "destSelectLbl";
+            destSelectLbl.Size = new Size(400, 28);
+            destSelectLbl.TabIndex = 2;
+            destSelectLbl.Text = "Select";
+            destSelectLbl.Click += destSelectLbl_Click;
             // 
-            // destTB
+            // srcSelectLbl
             // 
-            destTB.Font = new Font("Segoe UI", 15F, FontStyle.Regular, GraphicsUnit.Point);
-            destTB.Location = new Point(191, 55);
-            destTB.Name = "destTB";
-            destTB.PlaceholderText = "Select";
-            destTB.ReadOnly = true;
-            destTB.Size = new Size(480, 34);
-            destTB.TabIndex = 2;
+            srcSelectLbl.BackColor = SystemColors.ControlDark;
+            srcSelectLbl.Font = new Font("Segoe UI", 15F);
+            srcSelectLbl.Location = new Point(191, 9);
+            srcSelectLbl.Name = "srcSelectLbl";
+            srcSelectLbl.Size = new Size(400, 28);
+            srcSelectLbl.TabIndex = 3;
+            srcSelectLbl.Text = "Select";
+            srcSelectLbl.Click += srcSelectLbl_Click;
+            // 
+            // sortBtn
+            // 
+            sortBtn.Location = new Point(601, 9);
+            sortBtn.Name = "sortBtn";
+            sortBtn.Size = new Size(77, 77);
+            sortBtn.TabIndex = 4;
+            sortBtn.Text = "Sort";
+            sortBtn.UseVisualStyleBackColor = true;
+            sortBtn.Click += sortBtn_Click;
             // 
             // FolderSelecterForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(688, 111);
-            Controls.Add(destTB);
-            Controls.Add(srcTB);
+            ClientSize = new Size(686, 93);
+            Controls.Add(sortBtn);
+            Controls.Add(srcSelectLbl);
+            Controls.Add(destSelectLbl);
             Controls.Add(destLbl);
             Controls.Add(srcLbl);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -95,7 +108,8 @@
 
         private Label srcLbl;
         private Label destLbl;
-        private TextBox srcTB;
-        private TextBox destTB;
+        private Label destSelectLbl;
+        private Label srcSelectLbl;
+        private Button sortBtn;
     }
 }
