@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileTidyUI", "FileTidyUI\FileTidyUI.csproj", "{BF5091FC-A7FB-4A1E-871B-CC2BF0B75753}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileTidyUI.Desktop", "FileTidyUI.Desktop\FileTidyUI.Desktop.csproj", "{625E14A9-1322-4387-AC8C-9C2CD7FA2E15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileTidyPicture", "..\FileTidyPicture\FileTidyPicture.csproj", "{A9BA01D7-7582-4439-B78D-3029C17F6481}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileTidyBase", "..\FileTidyBase\FileTidyBase.csproj", "{7434F76B-C944-45D1-81F9-1C0A3720FF89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{625E14A9-1322-4387-AC8C-9C2CD7FA2E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{625E14A9-1322-4387-AC8C-9C2CD7FA2E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{625E14A9-1322-4387-AC8C-9C2CD7FA2E15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9BA01D7-7582-4439-B78D-3029C17F6481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9BA01D7-7582-4439-B78D-3029C17F6481}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9BA01D7-7582-4439-B78D-3029C17F6481}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9BA01D7-7582-4439-B78D-3029C17F6481}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7434F76B-C944-45D1-81F9-1C0A3720FF89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7434F76B-C944-45D1-81F9-1C0A3720FF89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7434F76B-C944-45D1-81F9-1C0A3720FF89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7434F76B-C944-45D1-81F9-1C0A3720FF89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
