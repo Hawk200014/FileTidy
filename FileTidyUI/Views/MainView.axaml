@@ -12,5 +12,61 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+  <DockPanel>
+    <Border Height="25" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
+      <TextBlock Foreground="Black">Dock = "Top"</TextBlock>
+    </Border>
+    <Border Height="25" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
+      <TextBlock Foreground="Black">Dock = "Bottom"</TextBlock>
+    </Border>
+    <Border Height="" Background="DarkBlue" BorderBrush="Black" BorderThickness="1">
+      <DockPanel>
+        <Border DockPanel.Dock="Bottom" BorderBrush="Black" BorderThickness="1">
+          <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" Spacing="20" Margin="5">
+            <StackPanel Orientation="Vertical">
+              <TextBlock Text="{Binding Loc1}" />
+              <Button Content="Button 1" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+              <TextBlock Text="{Binding Loc1}" />
+              <Button Content="Button 2" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+              <TextBlock Text="{Binding Loc1}" />
+              <Button Content="Button 3" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+              <TextBlock Text="{Binding Loc1}" />
+              <Button Content="Button 4" />
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+              <TextBlock Text="{Binding Loc1}" />
+              <Button Content="Button 5" />
+            </StackPanel>
+            
+          </StackPanel>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
+          <StackPanel Orientation="Vertical" Width="250" >
+            <TextBlock>
+              FileName
+            </TextBlock>
+            <TextBox Text="{Binding FileName}" />
+            <TextBlock>
+              FilePath
+            </TextBlock>
+            <TextBox Text="{Binding FileName}" />
+            <TextBlock>
+              FileType
+            </TextBlock>
+            <TextBox Text="{Binding FileName}" />
+          </StackPanel>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1">
+          <Image Source="avares://FileTidyUI/Assets/avalonia-logo.ico" Width="250" Height="250" />
+        </Border>
+      </DockPanel>
+    </Border>
+
+  </DockPanel>
 </UserControl>
