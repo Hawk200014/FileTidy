@@ -24,30 +24,29 @@
         <Border DockPanel.Dock="Bottom" BorderBrush="Black" BorderThickness="1">
           <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" Spacing="20" Margin="5">
             <StackPanel Orientation="Vertical">
-              <TextBlock Text="{Binding Loc1}" />
+              <ComboBox />
               <Button Content="Button 1" />
             </StackPanel>
             <StackPanel Orientation="Vertical">
-              <TextBlock Text="{Binding Loc1}" />
+              <ComboBox />
               <Button Content="Button 2" />
             </StackPanel>
             <StackPanel Orientation="Vertical">
-              <TextBlock Text="{Binding Loc1}" />
+              <ComboBox />
               <Button Content="Button 3" />
             </StackPanel>
             <StackPanel Orientation="Vertical">
-              <TextBlock Text="{Binding Loc1}" />
+              <ComboBox />
               <Button Content="Button 4" />
             </StackPanel>
             <StackPanel Orientation="Vertical">
-              <TextBlock Text="{Binding Loc1}" />
+              <ComboBox />
               <Button Content="Button 5" />
             </StackPanel>
-            
           </StackPanel>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right">
-          <StackPanel Orientation="Vertical" Width="250" >
+          <StackPanel Orientation="Vertical" Width="250" Margin="5" >
             <TextBlock>
               FileName
             </TextBlock>
@@ -63,7 +62,16 @@
           </StackPanel>
         </Border>
         <Border BorderBrush="Black" BorderThickness="1">
-          <Image Source="avares://FileTidyUI/Assets/avalonia-logo.ico" Width="250" Height="250" />
+          <DockPanel>
+            <Border DockPanel.Dock="Bottom" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Margin="2">
+              <StackPanel Orientation="Horizontal" Spacing="50">
+                <Button>L</Button>
+                <TextBlock Foreground="Black" VerticalAlignment="Center">Dock = "Bottom"</TextBlock>
+                <Button>R</Button>
+              </StackPanel>
+            </Border>
+            <Image Source="avares://FileTidyUI/Assets/avalonia-logo.ico" Width="250" Height="250" />
+          </DockPanel>
         </Border>
       </DockPanel>
     </Border>
