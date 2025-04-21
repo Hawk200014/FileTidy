@@ -6,5 +6,6 @@
 
     <Application.Styles>
         <FluentTheme />
+      <StyleInclude Source="avares://FileTidyUI/Icons.axaml"> </StyleInclude>
     </Application.Styles>
 </Application>

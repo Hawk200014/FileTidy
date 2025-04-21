@@ -1,0 +1,168 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:FileTidyUI.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FileTidyUI.Views.Main.MainView"
+             x:DataType="vm:MainViewModel">
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+  <DockPanel>
+    <Border Height="38" Background="DarkBlue" BorderBrush="Black" BorderThickness="0" DockPanel.Dock="Top">
+      <Grid VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="100" />
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="38" />
+        </Grid.ColumnDefinitions>
+        <ComboBox x:Name="fileType" Grid.Column="0" Margin="1" VerticalAlignment="Center" Width="100" ToolTip.Tip="Select File Type" MaxDropDownHeight="100" SelectionChanged="FileTypeIndexChanged">
+          <ComboBoxItem>PDF</ComboBoxItem>
+          <ComboBoxItem>Img</ComboBoxItem>
+        </ComboBox>
+        <TextBox x:Name="chaosFolderPathTB" Grid.Column="1" Margin="1" Watermark="Chaos Folder" VerticalAlignment="Center" IsReadOnly="True" IsHitTestVisible="False"></TextBox>
+        <Button x:Name="choasFolderSelectBtn" Click="FolderSelectClick" Grid.Column="2" Margin="1" ToolTip.Tip="Select Chaos Folder" VerticalAlignment="Center">
+          <PathIcon Data="{StaticResource open_regular}"  />
+        </Button>
+      </Grid>
+    </Border>
+    <Border Height="38" Background="DarkBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">
+      <Grid VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="150" />
+          <ColumnDefinition Width="100" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Label x:Name="progressBarLbl" Grid.Column="0" Content="Idle" VerticalAlignment="Center" IsVisible="False"></Label>
+        <ProgressBar Grid.Column="1" x:Name="progressBar" Height="28" Margin="5" Minimum="0" Maximum="100" Value="0" IsIndeterminate="True" VerticalAlignment="Center" IsVisible="False"/>
+      </Grid>
+    </Border>
+    <Border Height="" Background="DarkBlue" BorderBrush="Black" BorderThickness="1">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="50*" MinWidth="250"/>
+          <ColumnDefinition Width="5" />
+          <ColumnDefinition Width="25*" MinWidth="150"/>
+          <ColumnDefinition Width="5" />
+          <ColumnDefinition Width="25*" MinWidth="150" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1" >
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+              <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Border x:Name="browserParent" Grid.Row="0" Grid.Column="0" BorderBrush="White" BorderThickness="1">
+              <Viewbox Stretch="Uniform">
+                <Decorator x:Name="browserWrapper"/>
+              </Viewbox>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="0" BorderBrush="White" BorderThickness="1">
+              <Panel  Margin="5" >
+                <Button Click="FileIndexDown" Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center">
+                  <PathIcon Data="{StaticResource caret_left_regular}"  />
+                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                  <Label x:Name="fileIndexNumber" Content="15"></Label>
+                  <Label>/</Label>
+                  <Label x:Name="fileMaxNumber" Content="500"></Label>
+                </StackPanel>
+                <Button Click="FileIndexUp" Height="40" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">
+                  <PathIcon Data="{StaticResource caret_right_regular}"  />
+                </Button>
+              </Panel>
+            </Border>
+          </Grid>
+        </Border>
+        <GridSplitter Grid.Row="0" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" ResizeDirection="Columns"/>
+        <Border Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="1" >
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+              <RowDefinition Height="50" />
+              <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0">
+              <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Margin="0 5">
+                  FileName
+                </TextBlock>
+                <TextBox x:Name="fileNameTB" />
+                <TextBlock Margin="0 15 0 5">
+                  FilePath
+                </TextBlock>
+                <TextBox x:Name="filePathTB" IsReadOnly="True" />
+                <TextBlock Margin="0 15 0 5">
+                  FileType
+                </TextBlock>
+                <TextBox x:Name="fileTypeTB" IsReadOnly="True" />
+                <TextBlock Margin="0 15 0 5">
+                  FileHash
+                </TextBlock>
+                <TextBox x:Name="fileHashTB" IsReadOnly="True" />
+                <TextBlock Margin="0 15 0 5">
+                  FileSize
+                </TextBlock>
+                <TextBox x:Name="fileSizeTB" IsReadOnly="True" />
+                <TextBlock Margin="0 15 0 5">
+                  Action
+                </TextBlock>
+                <TextBox x:Name="fileActionTB" IsReadOnly="True" />
+              </StackPanel>
+            </ScrollViewer>
+            <Button Grid.Row="1" x:Name="fileResetBtn" Click="FileResetActionClick" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" >
+              <PathIcon Data="{StaticResource arrow_undo_regular}"  />
+            </Button>
+            <Button Grid.Row="2" x:Name="fileDeleteBtn" Click="FileDeleteActionClick" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" >
+              <PathIcon Data="{StaticResource delete_regular}"  />
+            </Button>
+          </Grid>
+        </Border>
+        <GridSplitter Grid.Row="0" Grid.Column="3" Width="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" ResizeDirection="Columns"/>
+        <Border Grid.Row="0" Grid.Column="4" BorderBrush="Black" BorderThickness="1" >
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*" />
+              <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderBrush="White" BorderThickness="1">
+              <ScrollViewer>
+                <StackPanel Orientation="Vertical" Spacing="5"  Margin="5">
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                  <Button HorizontalAlignment="Stretch"  Content="TestButton1" />
+                </StackPanel>
+              </ScrollViewer>
+            </Border>
+            <Border Grid.Row="1" BorderBrush="White" BorderThickness="1">
+              <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
+                <Button HorizontalAlignment="Left" Height="40" Width="40">
+                  <PathIcon Data="{StaticResource add_regular}"  />
+                </Button>
+                <Button HorizontalAlignment="Right" Height="40" Width="40">
+                  <PathIcon Data="{StaticResource edit_regular}"  />
+                </Button>
+              </Panel>
+            </Border>
+          </Grid>
+        </Border>
+      </Grid>
+    </Border>
+
+  </DockPanel>
+</UserControl>
