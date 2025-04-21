@@ -405,6 +405,7 @@ public partial class MainView : UserControl
             System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Reset File " + file.FilePath);
             file.ResetAction();
             System.Diagnostics.Debug.WriteLine(className + ":" + method + ": File Action " + file.Action);
+
             UpdateFileInfo();
         }
     }
