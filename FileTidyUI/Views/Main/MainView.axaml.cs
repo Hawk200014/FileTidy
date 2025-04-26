@@ -19,6 +19,8 @@ using System.Xml.Linq;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Layout;
+using FileTidyUI.Controls;
+using System.ComponentModel;
 
 namespace FileTidyUI.Views.Main;
 
@@ -27,11 +29,15 @@ public partial class MainView : UserControl
     private string className = "MainView";
     private AvaloniaCefBrowser browser;
     private int _index = 0;
+    private FileBaseModel? _activeFileModel;
 
     private Dictionary<string, List<string>> _fileTypes = new()
     {
         { "Img", new List<string>{".PNG" , ".WEBP", ".JPG"} },
-        { "PDF", new List<string>{".PDF"} }
+        { "PDF", new List<string>{".PDF"} },
+        { "Video", new List<string>{".MP4", ".AVI", ".MKV"} },
+        { "Text", new List<string>{".TXT"} },
+        { "All", new List<string>{".PNG" , ".WEBP", ".JPG", ".PDF", ".MP4", ".AVI", ".MKV", ".TXT" } }
     };
 
     private string _chaosFolderPath = "";
@@ -48,14 +54,30 @@ public partial class MainView : UserControl
 
         browser = new AvaloniaCefBrowser();
         browser.Address = "";
-        //browser.RegisterJavascriptObject(new BindingTestClass(), "boundBeforeLoadObject");
-        //browser.LoadStart += OnBrowserLoadStart;
-        //browser.TitleChanged += OnBrowserTitleChanged;
-        //browser.LifeSpanHandler = new BrowserLifeSpanHandler();
-        //SetBrowserWidthAndHeight();
+        
 
         browserWrapper.Child = browser;
 
+        FillFormatCombobox();
+
+    }
+
+    private void FillFormatCombobox()
+    {
+        ComboBox? filetypes = this.FindControl<ComboBox>("fileType");
+
+        if (filetypes == null) return;
+
+        filetypes.Items.Clear();
+
+        foreach (var fileType in _fileTypes.Keys)
+        {
+            ComboBoxItem item = new ComboBoxItem()
+            {
+                Content = fileType
+            };
+            filetypes.Items.Add(item);
+        }
     }
 
     private void SetBrowserWidthAndHeight()
@@ -89,9 +111,6 @@ public partial class MainView : UserControl
     }
 
 
-
-   
-
     #region handler
     public async void FolderSelectClick(object sender, RoutedEventArgs args)
     {
@@ -124,11 +143,15 @@ public partial class MainView : UserControl
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
         var stackPanel = this.FindControl<StackPanel>("sortFolderStackPanel");
 
-        var button = new Button()
 
+        SortFolderModel sortFolder = new SortFolderModel()
         {
-            Content = "Sort Folder" + stackPanel.Children.Count,
-            Name = "sortFolderButton" + stackPanel.Children.Count,
+            FolderPath = _chaosFolderPath,
+            Name = "SortFolder" + stackPanel.Children.Count
+        };
+
+        var button = new SortButton(sortFolder)
+        {
             HorizontalAlignment = HorizontalAlignment.Stretch
         };
 
@@ -142,12 +165,41 @@ public partial class MainView : UserControl
     {
         string method = "SortButtonClick";
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        var button = sender as Button;
+        if(_activeFileModel == null) return;
+        SortButton button = sender as SortButton;
         if (button != null)
         {
-            System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Sort Folder Clicked " + button.Name);
-            var stackPanel = this.FindControl<StackPanel>("sortFolderStackPanel");
-            stackPanel.Children.Remove(button);
+            System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Sort Folder Clicked with guid: " + button.GetGuid().ToString());
+            _activeFileModel.NewFilePath = button.GetFolderPath();
+            //stackPanel.Children.Remove(button);
+        }
+    }
+
+    public void NameChangedEvent(object sender, RoutedEventArgs args)
+    {
+        string method = "NameChangedEvent";
+        System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        if (_activeFileModel != null)
+        {
+            string extension = _activeFileModel.GetFileType();
+
+            if(!fileNameTB.Text.EndsWith(extension))
+            {
+                fileNameTB.Text = fileNameTB.Text.Trim() + extension; 
+            }
+
+            if ( fileNameTB.Text.Trim() == _activeFileModel.FileName)
+            {
+                _activeFileModel.NewFileName = "";
+
+            }
+            else
+            {
+                _activeFileModel.NewFileName = fileNameTB.Text.Trim();
+            }
+
+
+            System.Diagnostics.Debug.WriteLine(className + ":" + method + ": File Name " + _activeFileModel.NewFileName);
         }
     }
 
@@ -257,6 +309,10 @@ public partial class MainView : UserControl
     {
         string method = "SetFileIndexNumber";
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        if(_fileBaseController.GetFileCount() == 0)
+        {
+            index = 0;
+        }
         _index = index;
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
@@ -270,23 +326,45 @@ public partial class MainView : UserControl
     public void UpdateFileInfo()
     {
         string method = "UpdateFileInfo";
+        bool valid = _fileBaseController.GetFileCount() != 0;
+       
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            FileBaseModel file = _fileBaseController.GetFile(_index - 1);
-            fileNameTB.Text = file.FileName;
-            filePathTB.Text = file.FilePath;
-            fileTypeTB.Text = file.FileType;
-            fileHashTB.Text = file.FileContentHashValue;
-            fileSizeTB.Text = file.FileSize;
-            fileActionTB.Text = file.Action;
+            if (valid)
+            {
+
+                FileBaseModel file = _fileBaseController.GetFile(_index - 1);
+                fileNameTB.Text = file.FileName;
+                filePathTB.Text = file.FilePath;
+                fileTypeTB.Text = file.FileType;
+                fileHashTB.Text = file.FileContentHashValue;
+                fileSizeTB.Text = file.FileSize;
+                fileActionTB.Text = file.Action;
+                _activeFileModel = file;
+                System.Diagnostics.Debug.WriteLine(className + ":" + method + " Set Active Filemodel to " + _activeFileModel.FileName);
+                browser.IsVisible = true;
+            }
+            else
+            {
+                fileNameTB.Text = "";
+                filePathTB.Text = "";
+                fileTypeTB.Text = "";
+                fileHashTB.Text = "";
+                fileSizeTB.Text = "";
+                fileActionTB.Text = "";
+                _activeFileModel = null;
+                System.Diagnostics.Debug.WriteLine(className + ":" + method + " Set Active Filemodel to null");
+                browser.Address = "";
+                browser.IsVisible = false;
+            }
         });
     }
 
     private void LoadBrowser(int index)
     {
         SetBrowserWidthAndHeight();
-        if (_fileBaseController.GetFileCount() > index - 1)
+        if (_fileBaseController.GetFileCount() > index - 1 && _fileBaseController.GetFileCount() != 0)
         {
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {

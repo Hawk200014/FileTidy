@@ -21,9 +21,6 @@
           <ColumnDefinition Width="38" />
         </Grid.ColumnDefinitions>
         <ComboBox x:Name="fileType" Grid.Column="0" Margin="1" VerticalAlignment="Center" Width="100" ToolTip.Tip="Select File Type" MaxDropDownHeight="100" SelectionChanged="FileTypeIndexChanged">
-          <ComboBoxItem>PDF</ComboBoxItem>
-          <ComboBoxItem>Img</ComboBoxItem>
-          <ComboBoxItem>Video</ComboBoxItem>
         </ComboBox>
         <TextBox x:Name="chaosFolderPathTB" Grid.Column="1" Margin="1" Watermark="Chaos Folder" VerticalAlignment="Center" IsReadOnly="True" IsHitTestVisible="False"></TextBox>
         <Button x:Name="choasFolderSelectBtn" Click="FolderSelectClick" Grid.Column="2" Margin="1" ToolTip.Tip="Select Chaos Folder" VerticalAlignment="Center">
@@ -95,7 +92,7 @@
                 <TextBlock Margin="0 5">
                   FileName
                 </TextBlock>
-                <TextBox x:Name="fileNameTB" />
+                <TextBox x:Name="fileNameTB" LostFocus="NameChangedEvent"/>
                 <TextBlock Margin="0 15 0 5">
                   FilePath
                 </TextBlock>
