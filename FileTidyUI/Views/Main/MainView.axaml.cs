@@ -15,6 +15,10 @@ using Xilium.CefGlue.Avalonia;
 using Xilium.CefGlue.Common.Handlers;
 using FileTidyBase.Controller;
 using FileTidyBase.Models;
+using System.Xml.Linq;
+using Avalonia.Input;
+using Avalonia.Media;
+using Avalonia.Layout;
 
 namespace FileTidyUI.Views.Main;
 
@@ -48,7 +52,7 @@ public partial class MainView : UserControl
         //browser.LoadStart += OnBrowserLoadStart;
         //browser.TitleChanged += OnBrowserTitleChanged;
         //browser.LifeSpanHandler = new BrowserLifeSpanHandler();
-        SetBrowserWidthAndHeight();
+        //SetBrowserWidthAndHeight();
 
         browserWrapper.Child = browser;
 
@@ -56,6 +60,8 @@ public partial class MainView : UserControl
 
     private void SetBrowserWidthAndHeight()
     {
+        string method = "SetBrowserWidthAndHeight";
+        
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             if (browserParent != null)
@@ -68,6 +74,9 @@ public partial class MainView : UserControl
                 browser.Height = 600; // Default height
                 browser.Width = 800; // Default width
             }
+
+            browser.IsVisible = true;
+            System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + " Sets Browser bounds to " + browser.Height + ", " + browser.Width);
         });
     }
 
@@ -78,6 +87,10 @@ public partial class MainView : UserControl
             return;
         }
     }
+
+
+
+   
 
     #region handler
     public async void FolderSelectClick(object sender, RoutedEventArgs args)
@@ -105,6 +118,39 @@ public partial class MainView : UserControl
         }
     }
 
+    public void AddSortFolderClick(object sender, RoutedEventArgs args)
+    {
+        string method = "AddSortFolderClick";
+        System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        var stackPanel = this.FindControl<StackPanel>("sortFolderStackPanel");
+
+        var button = new Button()
+
+        {
+            Content = "Sort Folder" + stackPanel.Children.Count,
+            Name = "sortFolderButton" + stackPanel.Children.Count,
+            HorizontalAlignment = HorizontalAlignment.Stretch
+        };
+
+        button.Click += SortButtonClick;
+
+        stackPanel.Children.Add(button);
+
+    }
+
+    public void SortButtonClick(object sender, RoutedEventArgs args)
+    {
+        string method = "SortButtonClick";
+        System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        var button = sender as Button;
+        if (button != null)
+        {
+            System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Sort Folder Clicked " + button.Name);
+            var stackPanel = this.FindControl<StackPanel>("sortFolderStackPanel");
+            stackPanel.Children.Remove(button);
+        }
+    }
+
     public void FileIndexUp(object sender, RoutedEventArgs args)
     {
         string method = "FileIndexUp";
@@ -113,6 +159,19 @@ public partial class MainView : UserControl
         {
             SetFileIndexNumber(_index + 1);
         }
+    }
+
+    public void DragStartEvent(object sender, VectorEventArgs args)
+    {
+        browser.IsVisible = false;
+    }
+
+    public void DragCompleteEvent(object sender, VectorEventArgs args)
+    { 
+        string method = "DragCompleteEvent";
+        System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        SetBrowserWidthAndHeight();
+        
     }
 
     public void FileIndexDown(object sender, RoutedEventArgs args)
@@ -261,7 +320,7 @@ public partial class MainView : UserControl
     public List<string> GetAllowedFileTypes()
     {
         string method = "GetAllowedFileTypes";
-        System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Gets " + _allowedFileTypes);
+        //System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Gets " + _allowedFileTypes);
         return _allowedFileTypes;
     }
 

@@ -5,7 +5,12 @@
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
-        <FluentTheme />
+      <FluentTheme>
+        <FluentTheme.Palettes>
+          <ColorPaletteResources x:Key="Light" Accent="#ff00adb5" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffdcd6f7" BaseMedium="#ff958fb9" BaseMediumHigh="#ff666090" BaseMediumLow="#ff7e78a5" ChromeAltLow="#ff666090" ChromeBlackHigh="Black" ChromeBlackLow="#ffdcd6f7" ChromeBlackMedium="#ff666090" ChromeBlackMediumLow="#ff958fb9" ChromeDisabledHigh="#ffdcd6f7" ChromeDisabledLow="#ff958fb9" ChromeGray="#ff7e78a5" ChromeHigh="#ffdcd6f7" ChromeLow="#fff2efff" ChromeMedium="#ffeeeafd" ChromeMediumLow="#fff2efff" ChromeWhite="White" ListLow="#ffeeeafd" ListMedium="#ffdcd6f7" RegionColor="#fff4eeff" />
+          <ColorPaletteResources x:Key="Dark" Accent="#ff00adb5" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff393e46" BaseMedium="#ff97a0ac" BaseMediumHigh="#ffafb9c6" BaseMediumLow="#ff686f79" ChromeAltLow="#ffafb9c6" ChromeBlackHigh="Black" ChromeBlackLow="#ffafb9c6" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff393e46" ChromeDisabledLow="#ff97a0ac" ChromeGray="#ff808893" ChromeHigh="#ff808893" ChromeLow="#ff0b1d32" ChromeMedium="#ff172537" ChromeMediumLow="#ff2e3641" ChromeWhite="White" ListLow="#ff172537" ListMedium="#ff393e46" RegionColor="#ff222831" />
+        </FluentTheme.Palettes>
+      </FluentTheme>
       <StyleInclude Source="avares://FileTidyUI/Icons.axaml"> </StyleInclude>
     </Application.Styles>
 </Application>
