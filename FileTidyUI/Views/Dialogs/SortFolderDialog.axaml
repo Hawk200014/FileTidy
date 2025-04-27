@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="330"
+        x:Class="FileTidyUI.Views.Dialogs.SortFolderDialog"
+        Title="SortFolderDialog">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="50" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="50" />
+    </Grid.RowDefinitions>
+    <Label Grid.Row="0" Content="Sort Folder" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" />
+    
+    <ScrollViewer Grid.Row="1">
+      <StackPanel Orientation="Vertical" Margin="5">
+        <TextBlock Margin="0 5">
+          Sort Folder Name
+        </TextBlock>
+        <TextBox x:Name="sortFolderNameTB" />
+        <TextBlock Margin="0 15 0 5">
+          Sort Path
+        </TextBlock>
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2" />
+            <ColumnDefinition Width="30" />
+          </Grid.ColumnDefinitions>
+          <TextBox Grid.Column="0" x:Name="sortPathTB" IsReadOnly="True"></TextBox>
+          <Button Grid.Column="2" x:Name="sortPathSelectBtn"  ToolTip.Tip="Select Sort Path" VerticalAlignment="Center">
+            <PathIcon Data="{StaticResource open_regular}"  />
+          </Button>
+        </Grid>
+        <TextBlock Margin="0 15 0 5">
+          Sort GUID
+        </TextBlock>
+        <TextBox x:Name="sortFolderGuidTB" IsReadOnly="True" />
+      </StackPanel>
+    </ScrollViewer>
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+      <Button x:Name="okBtn" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Label Content="OK" VerticalAlignment="Center" HorizontalAlignment="Center" />
+      </Button>
+      <Button x:Name="cancelBtn" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Label Content="Cancle" VerticalAlignment="Center" HorizontalAlignment="Center" />
+      </Button>
+    </StackPanel>
+  </Grid>
+</Window>

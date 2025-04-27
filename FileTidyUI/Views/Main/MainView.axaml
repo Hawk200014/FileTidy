@@ -69,9 +69,9 @@
                   <PathIcon Data="{StaticResource caret_left_regular}"  />
                 </Button>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                  <Label x:Name="fileIndexNumber" Content="15"></Label>
+                  <Label x:Name="fileIndexNumber" Content="0"></Label>
                   <Label>/</Label>
-                  <Label x:Name="fileMaxNumber" Content="500"></Label>
+                  <Label x:Name="fileMaxNumber" Content="0"></Label>
                 </StackPanel>
                 <Button Click="FileIndexUp" Height="40" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">
                   <PathIcon Data="{StaticResource caret_right_regular}"  />
