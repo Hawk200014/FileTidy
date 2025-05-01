@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="330"
         x:Class="FileTidyUI.Views.Dialogs.SortFolderDialog"
+        Icon="/Assets/avalonia-logo.ico"
         Title="SortFolderDialog">
   <Grid>
     <Grid.RowDefinitions>

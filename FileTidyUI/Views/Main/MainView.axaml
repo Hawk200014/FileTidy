@@ -143,9 +143,9 @@
                 <Button Click="AddSortFolderClick" HorizontalAlignment="Left" Height="40" Width="40">
                   <PathIcon Data="{StaticResource add_regular}"  />
                 </Button>
-                <Button HorizontalAlignment="Right" Height="40" Width="40">
+                <ToggleButton x:Name="editSortFolderBtn"  HorizontalAlignment="Right" Height="40" Width="40">
                   <PathIcon Data="{StaticResource edit_regular}"  />
-                </Button>
+                </ToggleButton>
               </Panel>
             </Border>
           </Grid>

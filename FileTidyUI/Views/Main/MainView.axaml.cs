@@ -21,6 +21,10 @@ using Avalonia.Media;
 using Avalonia.Layout;
 using FileTidyUI.Controls;
 using System.ComponentModel;
+using ReactiveUI;
+using FileTidyUI.Views.Dialogs;
+using Avalonia.ReactiveUI;
+using System.Windows.Input;
 
 namespace FileTidyUI.Views.Main;
 
@@ -30,6 +34,8 @@ public partial class MainView : UserControl
     private AvaloniaCefBrowser browser;
     private int _index = 0;
     private FileBaseModel? _activeFileModel;
+
+    private bool _isEditSortFolderMode = false;
 
     private Dictionary<string, List<string>> _fileTypes = new()
     {
@@ -57,6 +63,8 @@ public partial class MainView : UserControl
         
 
         browserWrapper.Child = browser;
+
+
 
         FillFormatCombobox();
 
@@ -155,11 +163,16 @@ public partial class MainView : UserControl
             HorizontalAlignment = HorizontalAlignment.Stretch
         };
 
+        SortFolderDialog dialog = new SortFolderDialog();
+
+        dialog.ShowDialog(MainWindow.window);
+
         button.Click += SortButtonClick;
 
         stackPanel.Children.Add(button);
 
     }
+
 
     public void SortButtonClick(object sender, RoutedEventArgs args)
     {
@@ -174,6 +187,10 @@ public partial class MainView : UserControl
             //stackPanel.Children.Remove(button);
         }
     }
+
+    
+
+    
 
     public void NameChangedEvent(object sender, RoutedEventArgs args)
     {
