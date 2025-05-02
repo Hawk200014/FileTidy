@@ -25,6 +25,7 @@ using ReactiveUI;
 using FileTidyUI.Views.Dialogs;
 using Avalonia.ReactiveUI;
 using System.Windows.Input;
+using FileTidyUI.ResultSets;
 
 namespace FileTidyUI.Views.Main;
 
@@ -39,7 +40,7 @@ public partial class MainView : UserControl
 
     private Dictionary<string, List<string>> _fileTypes = new()
     {
-        { "Img", new List<string>{".PNG" , ".WEBP", ".JPG"} },
+        { "Img", new List<string>{".PNG" , ".WEBP", ".JPG", ".JPEG"} },
         { "PDF", new List<string>{".PDF"} },
         { "Video", new List<string>{".MP4", ".AVI", ".MKV"} },
         { "Text", new List<string>{".TXT"} },
@@ -60,7 +61,7 @@ public partial class MainView : UserControl
 
         browser = new AvaloniaCefBrowser();
         browser.Address = "";
-        
+
 
         browserWrapper.Child = browser;
 
@@ -91,7 +92,7 @@ public partial class MainView : UserControl
     private void SetBrowserWidthAndHeight()
     {
         string method = "SetBrowserWidthAndHeight";
-        
+
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             if (browserParent != null)
@@ -145,52 +146,117 @@ public partial class MainView : UserControl
         }
     }
 
-    public void AddSortFolderClick(object sender, RoutedEventArgs args)
+    public async void AddSortFolderClick(object sender, RoutedEventArgs args)
     {
         string method = "AddSortFolderClick";
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        var stackPanel = this.FindControl<StackPanel>("sortFolderStackPanel");
-
-
-        SortFolderModel sortFolder = new SortFolderModel()
-        {
-            FolderPath = _chaosFolderPath,
-            Name = "SortFolder" + stackPanel.Children.Count
-        };
-
-        var button = new SortButton(sortFolder)
-        {
-            HorizontalAlignment = HorizontalAlignment.Stretch
-        };
-
-        SortFolderDialog dialog = new SortFolderDialog();
-
-        dialog.ShowDialog(MainWindow.window);
-
-        button.Click += SortButtonClick;
-
-        stackPanel.Children.Add(button);
-
+        ShowSortFolderDialog();
     }
 
-
-    public void SortButtonClick(object sender, RoutedEventArgs args)
+    public async void ShowSortFolderDialog(SortFolderModel? model = null)
     {
-        string method = "SortButtonClick";
+        string method = "ShowSortFolderDialog";
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        if(_activeFileModel == null) return;
-        SortButton button = sender as SortButton;
-        if (button != null)
+        SortFolderDialog dialog = new SortFolderDialog(model);
+        await dialog.ShowDialog(MainWindow.window);
+        SortFolderResultSet result = dialog.GetValue();
+        switch (result.GetAction())
         {
-            System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Sort Folder Clicked with guid: " + button.GetGuid().ToString());
-            _activeFileModel.NewFilePath = button.GetFolderPath();
-            //stackPanel.Children.Remove(button);
+            case ACTION.NONE:
+                System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Do nothing");
+                return;
+            case ACTION.ADD:
+                System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Add Sort Folder with guid: " + result.GetResult().GUID.ToString());
+                AddOrEditSortFolder(result.GetResult());
+                break;
+            case ACTION.DELETE:
+                System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Delete Sort Folder with guid: " + result.GetResult().GUID.ToString());
+                RemoveSortFolder(result.GetResult());
+                break;
+            case ACTION.EDIT:
+                System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Edit Sort Folder with guid: " + result.GetResult().GUID.ToString());
+                AddOrEditSortFolder(result.GetResult());
+                break;
+            default:
+                System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "No Action");
+                break;
         }
     }
 
-    
+    private void RemoveSortFolder(SortFolderModel? sortFolderModel)
+    {
+        if (sortFolderModel == null) return;
+        var stackPanel = this.FindControl<StackPanel>("sortFolderStackPanel");
+        var buttons = stackPanel.Children.OfType<SortButton>();
+        SortButton? button = buttons.Where(x => x.GetGuid() == sortFolderModel.GUID).FirstOrDefault();
+        if (button == null) return;
+        System.Diagnostics.Debug.WriteLine(className + ":" + "RemoveSortFolder" + ":" + "Remove Sort Folder with guid: " + button.GetGuid().ToString());
+        stackPanel.Children.Remove(button);
+    }
 
-    
+    private void AddOrEditSortFolder(SortFolderModel? sortFolderModel)
+    {
+        if (sortFolderModel == null) return;
+
+        var stackPanel = this.FindControl<StackPanel>("sortFolderStackPanel");
+
+        var buttonChilds = stackPanel.Children.OfType<SortButton>();
+
+        SortButton? sortButton = buttonChilds.Where(x => x.GetGuid() == sortFolderModel.GUID).FirstOrDefault();
+
+        if (sortButton == null)
+        {
+
+            var button = new SortButton(sortFolderModel)
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch
+            };
+
+
+            button.Click += SortButtonClick;
+
+            stackPanel.Children.Add(button);
+
+        }
+        else
+        {
+            sortButton.Update(sortFolderModel);
+        }
+    }
+
+    public async void SortButtonClick(object sender, RoutedEventArgs args)
+    {
+        string method = "SortButtonClick";
+        System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        SortButton button = sender as SortButton;
+        if (button == null) return;
+        System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Sort Folder Clicked with guid: " + button.GetGuid().ToString());
+        if (editSortFolderBtn.IsChecked ?? false)
+        {
+            ShowSortFolderDialog(button.GetSortFolderModel());
+        }
+        else
+        {
+            if (_activeFileModel == null) return;
+            _activeFileModel.SetMoveAction();
+            _activeFileModel.NewFilePath = button.GetFolderPath();
+            UpdateFileInfo();
+
+        }
+    }
+
+    public async void ExecuteButton_Click(object sender, RoutedEventArgs args)
+    {
+        string method = "ExecuteButton_Click";
+        System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        _fileBaseController.ExecuteActions();
+        LoadFiles();
+    }
+
+   
+
+
+
 
     public void NameChangedEvent(object sender, RoutedEventArgs args)
     {
@@ -200,12 +266,12 @@ public partial class MainView : UserControl
         {
             string extension = _activeFileModel.GetFileType();
 
-            if(!fileNameTB.Text.EndsWith(extension))
+            if (!fileNameTB.Text.EndsWith(extension))
             {
-                fileNameTB.Text = fileNameTB.Text.Trim() + extension; 
+                fileNameTB.Text = fileNameTB.Text.Trim() + extension;
             }
 
-            if ( fileNameTB.Text.Trim() == _activeFileModel.FileName)
+            if (fileNameTB.Text.Trim() == _activeFileModel.FileName)
             {
                 _activeFileModel.NewFileName = "";
 
@@ -236,11 +302,11 @@ public partial class MainView : UserControl
     }
 
     public void DragCompleteEvent(object sender, VectorEventArgs args)
-    { 
+    {
         string method = "DragCompleteEvent";
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
         SetBrowserWidthAndHeight();
-        
+
     }
 
     public void FileIndexDown(object sender, RoutedEventArgs args)
@@ -258,7 +324,7 @@ public partial class MainView : UserControl
         if (fileType is null || fileType.SelectedValue is null) return;
         string method = "FileTypeIndexChanged";
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        string selected = (fileType.SelectedValue as ComboBoxItem )?.Content?.ToString() ?? "";
+        string selected = (fileType.SelectedValue as ComboBoxItem)?.Content?.ToString() ?? "";
         System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Filetype selected " + selected);
         if (_fileTypes.TryGetValue(selected, out List<string>? values))
         {
@@ -284,7 +350,7 @@ public partial class MainView : UserControl
         string method = "SetAllowedFileTypes";
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
         _allowedFileTypes = types;
-        System.Diagnostics.Debug.WriteLine(className + ":" + method +": Sets Allowed Types " + types);
+        System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Sets Allowed Types " + types);
         LoadFiles();
     }
 
@@ -306,7 +372,7 @@ public partial class MainView : UserControl
 
         foreach (FileBaseModel filebase in _fileBaseController.GetAllFiles())
         {
-            
+
             System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Loads Fileinfo " + filebase.FilePath);
             await filebase.GetFileInfo();
             AddProgressbarValue(1);
@@ -326,7 +392,7 @@ public partial class MainView : UserControl
     {
         string method = "SetFileIndexNumber";
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        if(_fileBaseController.GetFileCount() == 0)
+        if (_fileBaseController.GetFileCount() == 0)
         {
             index = 0;
         }
@@ -344,7 +410,7 @@ public partial class MainView : UserControl
     {
         string method = "UpdateFileInfo";
         bool valid = _fileBaseController.GetFileCount() != 0;
-       
+
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
@@ -385,7 +451,7 @@ public partial class MainView : UserControl
         {
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
-                browser.Address = @"file:///" + _fileBaseController.GetFile(index-1).FilePath;
+                browser.Address = @"file:///" + _fileBaseController.GetFile(index - 1).FilePath;
             });
         }
     }

@@ -38,5 +38,16 @@ namespace FileTidyUI.Controls
         {
             return _sortFolderModel.Name;
         }
+
+        public SortFolderModel GetSortFolderModel()
+        {
+            return _sortFolderModel;
+        }
+
+        public void Update(SortFolderModel sortFolderModel)
+        {
+            _sortFolderModel = sortFolderModel;
+            this.Content = _sortFolderModel.Name;
+        }
     }
 }

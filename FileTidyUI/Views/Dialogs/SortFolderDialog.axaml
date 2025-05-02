@@ -30,7 +30,7 @@
             <ColumnDefinition Width="30" />
           </Grid.ColumnDefinitions>
           <TextBox Grid.Column="0" x:Name="sortPathTB" IsReadOnly="True"></TextBox>
-          <Button Grid.Column="2" x:Name="sortPathSelectBtn"  ToolTip.Tip="Select Sort Path" VerticalAlignment="Center">
+          <Button Grid.Column="2" Click="SortPathSelectButton_Click" x:Name="sortPathSelectBtn"  ToolTip.Tip="Select Sort Path" VerticalAlignment="Center">
             <PathIcon Data="{StaticResource open_regular}"  />
           </Button>
         </Grid>
@@ -41,10 +41,13 @@
       </StackPanel>
     </ScrollViewer>
     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-      <Button x:Name="okBtn" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center">
+      <Button Click="DeleteButton_Click" x:Name="deleteBtn" Background="Red" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Label Content="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" />
+      </Button>
+      <Button Click="OKButton_Click" x:Name="okBtn" Width="100"  VerticalAlignment="Center" HorizontalAlignment="Center">
         <Label Content="OK" VerticalAlignment="Center" HorizontalAlignment="Center" />
       </Button>
-      <Button x:Name="cancelBtn" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center">
+      <Button Click="CancleButton_Click" x:Name="cancelBtn" Width="100" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Label Content="Cancle" VerticalAlignment="Center" HorizontalAlignment="Center" />
       </Button>
     </StackPanel>
