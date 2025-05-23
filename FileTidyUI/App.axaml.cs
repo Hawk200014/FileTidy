@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 
 using FileTidyUI.ViewModels;
 using FileTidyUI.Views.Main;
+using System;
 
 namespace FileTidyUI;
 
