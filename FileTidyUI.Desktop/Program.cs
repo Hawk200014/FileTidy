@@ -1,10 +1,12 @@
 ﻿using System;
 
 using Avalonia;
+using Avalonia.Logging;
 using Avalonia.ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace FileTidyUI.Desktop;
 
@@ -15,12 +17,14 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        var outputTemplate = "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message}{NewLine}in method {MemberName} at {FilePath}:{LineNumber}{NewLine}{Exception}{NewLine}";
         // Configure Serilog  
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
-            .CreateLogger();
+                    .MinimumLevel.Warning()
+                    .Enrich.FromLogContext()
+                    .WriteTo.File("log/{Date}.log", LogEventLevel.Warning, outputTemplate) 
+                    .WriteTo.Console(LogEventLevel.Warning, outputTemplate, theme: AnsiConsoleTheme.Literate)
+                    .CreateLogger();
 
         AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
         {
@@ -36,15 +40,11 @@ class Program
             ConfigureServices(serviceCollection);
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
-            
-
-
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);
         }
         catch (Exception ex)
         {
-            
             Log.Fatal(ex, "Application terminated unexpectedly");
         }
         finally
