@@ -1,12 +1,14 @@
-﻿using System;
-
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Logging;
 using Avalonia.ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
-using ReactiveUI;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
+using System;
+using System.IO;
+using FileTidyDatabase;
+using Microsoft.EntityFrameworkCore;
+using FileTidyBase.Controller;
 
 namespace FileTidyUI.Desktop;
 
@@ -38,6 +40,7 @@ class Program
             // Configure Dependency Injection  
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
+            AddTransients(serviceCollection);
             _serviceProvider = serviceCollection.BuildServiceProvider();
 
             BuildAvaloniaApp()
@@ -53,10 +56,22 @@ class Program
         }
     }
 
+    private static void AddTransients(ServiceCollection serviceCollection)
+    {
+        serviceCollection.AddTransient<SortFolderController>();
+
+    }
+
     private static void ConfigureServices(IServiceCollection services)
     {
-        // Register application services here  
-        //services.AddSingleton<SomeService>();
+        var dataDirectory = Path.Combine(AppContext.BaseDirectory, "data");
+        Directory.CreateDirectory(dataDirectory);
+
+        var dbPath = Path.Combine(dataDirectory, "data.db");
+        var connectionString = $"Data Source={dbPath}";
+
+        services.AddDbContext<FileTidyDbContext>(options =>
+            options.UseSqlite(connectionString));
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
