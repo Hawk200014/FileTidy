@@ -1,4 +1,5 @@
 ﻿using FileTidyBase.Models;
+using FileTidyDatabase;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace FileTidyBase.Controller
     {
         private static ILogger Log => Serilog.Log.ForContext<SortFolderController>();
 
+        private FileTidyDbContext _context;
+
         /// <summary>
         /// Gets or sets the collection of sort folders.
         /// </summary>
@@ -29,6 +32,8 @@ namespace FileTidyBase.Controller
         public SortFolderController(FileTidyDbContext context)
         {
             Log.Here().Debug("Constructing SortFolderController");
+            this._context = context;
+            _sortFolders = context.SortFolders.ToList();
         }
 
         /// <summary>
@@ -45,6 +50,8 @@ namespace FileTidyBase.Controller
                 Name = name
             };
             _sortFolders.Add(sortFolder);
+            _context.SortFolders.Add(sortFolder);
+            _context.SaveChanges();
             Log.Here().Debug("Sort folder added. Path: {FolderPath}, Name: {Name}", folderPath, name);
         }
 
@@ -58,7 +65,7 @@ namespace FileTidyBase.Controller
             var sortFolder = _sortFolders.FirstOrDefault(f => f.GUID == guid);
             if (sortFolder != null)
             {
-                _sortFolders.Remove(sortFolder);
+               RemoveSortFolder(sortFolder);
                 Log.Here().Debug("Sort folder removed. GUID: {GUID}", guid);
             }
             else
@@ -77,7 +84,7 @@ namespace FileTidyBase.Controller
             var sortFolder = _sortFolders.FirstOrDefault(f => f.FolderPath == folderPath);
             if (sortFolder != null)
             {
-                _sortFolders.Remove(sortFolder);
+                RemoveSortFolder(sortFolder);
                 Log.Here().Debug("Sort folder removed. Path: {FolderPath}", folderPath);
             }
             else
@@ -96,6 +103,8 @@ namespace FileTidyBase.Controller
             {
                 Log.Here().Debug("Removing sort folder by model. Path: {FolderPath}, Name: {Name}, GUID: {GUID}", sortFolder.FolderPath, sortFolder.Name, sortFolder.GUID);
                 _sortFolders.Remove(sortFolder);
+                _context.SortFolders.Remove(sortFolder);
+                _context.SaveChanges();
                 Log.Here().Debug("Sort folder removed by model. Path: {FolderPath}, Name: {Name}, GUID: {GUID}", sortFolder.FolderPath, sortFolder.Name, sortFolder.GUID);
             }
             else

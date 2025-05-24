@@ -1,5 +1,4 @@
 ﻿using Avalonia;
-using Avalonia.Logging;
 using Avalonia.ReactiveUI;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -24,8 +23,8 @@ class Program
         Log.Logger = new LoggerConfiguration()
                     .MinimumLevel.Warning()
                     .Enrich.FromLogContext()
-                    .WriteTo.File("log/{Date}.log", LogEventLevel.Warning, outputTemplate) 
-                    .WriteTo.Console(LogEventLevel.Warning, outputTemplate, theme: AnsiConsoleTheme.Literate)
+                    .WriteTo.File("log/{Date}.log", Serilog.Events.LogEventLevel.Warning, outputTemplate) 
+                    .WriteTo.Console(Serilog.Events.LogEventLevel.Warning, outputTemplate, theme: AnsiConsoleTheme.Literate)
                     .CreateLogger();
 
         AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
