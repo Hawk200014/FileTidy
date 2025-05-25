@@ -16,21 +16,21 @@ public partial class SortFolderDialog : Window, IDialog<SortFolderResultSet>
     private SortFolderResultSet _resultSet { get; set; } = new(ACTION.NONE);
     private bool _IsEditMode { get; set; } = false;
 
-    public SortFolderDialog(SortFolderModel? model = null)
+    public SortFolderDialog()
+    {
+        InitializeComponent();
+        sortFolderGuidTB.Text = Guid.NewGuid().ToString();
+        deleteBtn.IsVisible = false;
+    }
+
+    public SortFolderDialog(SortFolderModel model)
     {
         InitializeComponent();
 
-        if(model != null)
-        {
-            SetSortFolderValues(model);
-            deleteBtn.IsVisible = true;
-            _IsEditMode = true;
-        }
-        else
-        {
-            deleteBtn.IsVisible = false;
-            sortFolderGuidTB.Text = Guid.NewGuid().ToString();
-        }
+        SetSortFolderValues(model);
+        deleteBtn.IsVisible = true;
+        _IsEditMode = true;
+
     }
 
     private void SetSortFolderValues(SortFolderModel model)
@@ -56,7 +56,7 @@ public partial class SortFolderDialog : Window, IDialog<SortFolderResultSet>
         if (folder.Count >= 1)
         {
             System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Folder Selected " + folder[0].Path.AbsolutePath);
-            sortPathTB.Text= folder[0].Path.AbsolutePath;
+            sortPathTB.Text = folder[0].Path.AbsolutePath;
         }
     }
 
@@ -68,7 +68,7 @@ public partial class SortFolderDialog : Window, IDialog<SortFolderResultSet>
 
     public async void OKButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        
+
         _resultSet.SetAction(_IsEditMode ? ACTION.EDIT : ACTION.ADD);
         this.Close();
     }
@@ -81,7 +81,7 @@ public partial class SortFolderDialog : Window, IDialog<SortFolderResultSet>
 
     public SortFolderResultSet GetValue()
     {
-        if(_resultSet.GetAction() != ACTION.DELETE && string.IsNullOrEmpty(sortPathTB.Text))
+        if (_resultSet.GetAction() != ACTION.DELETE && string.IsNullOrEmpty(sortPathTB.Text))
         {
             throw new Exception("Sort Path is empty");
         }
@@ -98,7 +98,7 @@ public partial class SortFolderDialog : Window, IDialog<SortFolderResultSet>
         {
             FolderPath = sortPathTB.Text,
             Name = sortFolderNameTB.Text,
-            GUID = Guid.Parse( sortFolderGuidTB.Text)
+            GUID = Guid.Parse(sortFolderGuidTB.Text)
         };
 
         _resultSet.SetResult(sortFolderModel);
