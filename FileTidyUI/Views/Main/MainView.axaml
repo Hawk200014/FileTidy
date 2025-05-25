@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:FileTidyUI.ViewModels"
+             xmlns:views="clr-namespace:FileTidyUI.Views.Main"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FileTidyUI.Views.Main.MainView"
              x:DataType="vm:MainViewModel">
@@ -43,115 +44,18 @@
         </Button>
       </Grid>
     </Border>
-    <Border Height="" BorderBrush="Black" BorderThickness="0">
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="50*" MinWidth="250"/>
-          <ColumnDefinition Width="2" />
-          <ColumnDefinition Width="25*" MinWidth="150"/>
-          <ColumnDefinition Width="2" />
-          <ColumnDefinition Width="25*" MinWidth="150" />
-        </Grid.ColumnDefinitions>
-        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="0" >
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*" />
-              <RowDefinition Height="50" />
-            </Grid.RowDefinitions>
-            <Border x:Name="browserParent" Grid.Row="0" Grid.Column="0" BorderBrush="White" BorderThickness="0">
-              <Viewbox Stretch="Uniform">
-                <Decorator HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="browserWrapper"/>
-              </Viewbox>
-            </Border>
-            <Border Grid.Row="1" Grid.Column="0" BorderBrush="White" BorderThickness="0">
-              <Panel  Margin="5" >
-                <Button Click="FileIndexDown" Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center">
-                  <PathIcon Data="{StaticResource caret_left_regular}"  />
-                </Button>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                  <Label x:Name="fileIndexNumber" Content="0"></Label>
-                  <Label>/</Label>
-                  <Label x:Name="fileMaxNumber" Content="0"></Label>
-                </StackPanel>
-                <Button Click="FileIndexUp" Height="40" Width="40" HorizontalAlignment="Right" VerticalAlignment="Center">
-                  <PathIcon Data="{StaticResource caret_right_regular}"  />
-                </Button>
-              </Panel>
-            </Border>
-          </Grid>
-        </Border>
-        <GridSplitter DragCompleted="DragCompleteEvent" DragStarted="DragStartEvent" Grid.Row="0" Grid.Column="1" Width="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" ResizeDirection="Columns"/>
-        <Border Grid.Row="0" Grid.Column="2" BorderBrush="Black" BorderThickness="0" >
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*" />
-              <RowDefinition Height="50" />
-            </Grid.RowDefinitions>
-            <ScrollViewer Grid.Row="0">
-              <StackPanel Orientation="Vertical" Margin="5">
-                <TextBlock Margin="0 5">
-                  FileName
-                </TextBlock>
-                <TextBox x:Name="fileNameTB" LostFocus="NameChangedEvent"/>
-                <TextBlock Margin="0 15 0 5">
-                  FilePath
-                </TextBlock>
-                <TextBox x:Name="filePathTB" IsReadOnly="True" />
-                <TextBlock Margin="0 15 0 5">
-                  FileType
-                </TextBlock>
-                <TextBox x:Name="fileTypeTB" IsReadOnly="True" />
-                <TextBlock Margin="0 15 0 5">
-                  FileHash
-                </TextBlock>
-                <TextBox x:Name="fileHashTB" IsReadOnly="True" />
-                <TextBlock Margin="0 15 0 5">
-                  FileSize
-                </TextBlock>
-                <TextBox x:Name="fileSizeTB" IsReadOnly="True" />
-                <TextBlock Margin="0 15 0 5">
-                  Action
-                </TextBlock>
-                <TextBox x:Name="fileActionTB" IsReadOnly="True" />
-              </StackPanel>
-            </ScrollViewer>
-            <Panel Grid.Row="1">
-              <Button  x:Name="fileResetBtn" Click="FileResetActionClick" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5" >
-                <PathIcon Data="{StaticResource arrow_undo_regular}"  />
-              </Button>
-              <Button  x:Name="fileDeleteBtn" Click="FileDeleteActionClick" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="5" >
-                <PathIcon Data="{StaticResource delete_regular}"  />
-              </Button>
-            </Panel>
-          </Grid>
-        </Border>
-        <GridSplitter Grid.Row="0" Grid.Column="3" Width="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" ResizeDirection="Columns"/>
-        <Border Grid.Row="0" Grid.Column="4" BorderBrush="Black" BorderThickness="0" >
-          <Grid>
-            <Grid.RowDefinitions>
-              <RowDefinition Height="*" />
-              <RowDefinition Height="50" />
-            </Grid.RowDefinitions>
-            <Border Grid.Row="0" BorderBrush="White" BorderThickness="0">
-              <ScrollViewer>
-                <StackPanel x:Name="sortFolderStackPanel" Orientation="Vertical" Spacing="5"  Margin="5">
-                </StackPanel>
-              </ScrollViewer>
-            </Border>
-            <Border Grid.Row="1" BorderBrush="White" BorderThickness="0">
-              <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
-                <Button Click="AddSortFolderClick" HorizontalAlignment="Left" Height="40" Width="40">
-                  <PathIcon Data="{StaticResource add_regular}"  />
-                </Button>
-                <ToggleButton x:Name="editSortFolderBtn"  HorizontalAlignment="Right" Height="40" Width="40">
-                  <PathIcon Data="{StaticResource edit_regular}"  />
-                </ToggleButton>
-              </Panel>
-            </Border>
-          </Grid>
-        </Border>
-      </Grid>
-    </Border>
+    <TabControl x:Name="mainTabControl" Margin="0">
+      <TabItem Header="Sorting" x:Name="sortingFilesTab">
+        <views:SortView></views:SortView>
+      </TabItem>
+      <TabItem Header="Dupplicates" x:Name="dupeFileTab">
+        <views:DupplicateView></views:DupplicateView>
+      </TabItem>
+      <TabItem Header="Settings" x:Name="settingsTab">
+        <views:SettingsView></views:SettingsView>
+      </TabItem>
+    </TabControl>
+    
 
   </DockPanel>
 </UserControl>

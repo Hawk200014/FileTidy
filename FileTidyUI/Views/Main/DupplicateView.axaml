@@ -4,13 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:FileTidyUI.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="FileTidyUI.Views.Main.SortView"
-             x:DataType="vm:SortViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:SortViewModel />
-  </Design.DataContext>
+             x:Class="FileTidyUI.Views.Main.DupplicateView"
+             x:DataType="vm:DupplicateViewModel">
+
 
   <Border Height="" BorderBrush="Black" BorderThickness="0">
     <Grid>
@@ -58,36 +54,14 @@
           </Grid.RowDefinitions>
           <ScrollViewer Grid.Row="0">
             <StackPanel Orientation="Vertical" Margin="5">
-              <TextBlock Margin="0 5">
-                FileName
-              </TextBlock>
-              <TextBox x:Name="fileNameTB"/>
-              <TextBlock Margin="0 15 0 5">
-                FilePath
-              </TextBlock>
-              <TextBox x:Name="filePathTB" IsReadOnly="True" />
-              <TextBlock Margin="0 15 0 5">
-                FileType
-              </TextBlock>
-              <TextBox x:Name="fileTypeTB" IsReadOnly="True" />
-              <TextBlock Margin="0 15 0 5">
-                FileHash
-              </TextBlock>
-              <TextBox x:Name="fileHashTB" IsReadOnly="True" />
-              <TextBlock Margin="0 15 0 5">
-                FileSize
-              </TextBlock>
-              <TextBox x:Name="fileSizeTB" IsReadOnly="True" />
-              <TextBlock Margin="0 15 0 5">
-                Action
-              </TextBlock>
-              <TextBox x:Name="fileActionTB" IsReadOnly="True" />
+    
             </StackPanel>
           </ScrollViewer>
           <Panel Grid.Row="1">
             <Button  x:Name="fileResetBtn" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="5" >
               <PathIcon Data="{StaticResource arrow_undo_regular}"  />
             </Button>
+            <Label x:Name="ActionLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Content="Action"></Label>
             <Button  x:Name="fileDeleteBtn" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="5" >
               <PathIcon Data="{StaticResource delete_regular}"  />
             </Button>
@@ -106,16 +80,6 @@
               <StackPanel x:Name="sortFolderStackPanel" Orientation="Vertical" Spacing="5"  Margin="5">
               </StackPanel>
             </ScrollViewer>
-          </Border>
-          <Border Grid.Row="1" BorderBrush="White" BorderThickness="0">
-            <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5">
-              <Button HorizontalAlignment="Left" Height="40" Width="40">
-                <PathIcon Data="{StaticResource add_regular}"  />
-              </Button>
-              <ToggleButton x:Name="editSortFolderBtn"  HorizontalAlignment="Right" Height="40" Width="40">
-                <PathIcon Data="{StaticResource edit_regular}"  />
-              </ToggleButton>
-            </Panel>
           </Border>
         </Grid>
       </Border>

@@ -57,16 +57,6 @@ public partial class MainView : UserControl
     {
         InitializeComponent();
 
-        var browserWrapper = this.FindControl<Decorator>("browserWrapper");
-
-        browser = new AvaloniaCefBrowser();
-        browser.Address = "";
-
-
-        browserWrapper.Child = browser;
-
-
-
         FillFormatCombobox();
 
     }
@@ -91,24 +81,24 @@ public partial class MainView : UserControl
 
     private void SetBrowserWidthAndHeight()
     {
-        string method = "SetBrowserWidthAndHeight";
+        //string method = "SetBrowserWidthAndHeight";
 
-        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-        {
-            if (browserParent != null)
-            {
-                browser.Height = browserParent.Bounds.Height;
-                browser.Width = browserParent.Bounds.Width;
-            }
-            else
-            {
-                browser.Height = 600; // Default height
-                browser.Width = 800; // Default width
-            }
+        //Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        //{
+        //    if (browserParent != null)
+        //    {
+        //        browser.Height = browserParent.Bounds.Height;
+        //        browser.Width = browserParent.Bounds.Width;
+        //    }
+        //    else
+        //    {
+        //        browser.Height = 600; // Default height
+        //        browser.Width = 800; // Default width
+        //    }
 
-            browser.IsVisible = true;
-            System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + " Sets Browser bounds to " + browser.Height + ", " + browser.Width);
-        });
+        //    browser.IsVisible = true;
+        //    System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + " Sets Browser bounds to " + browser.Height + ", " + browser.Width);
+        //});
     }
 
     private void OnBrowserLoadStart(object sender, Xilium.CefGlue.Common.Events.LoadStartEventArgs e)
@@ -226,23 +216,23 @@ public partial class MainView : UserControl
 
     public async void SortButtonClick(object sender, RoutedEventArgs args)
     {
-        string method = "SortButtonClick";
-        System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        SortButton button = sender as SortButton;
-        if (button == null) return;
-        System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Sort Folder Clicked with guid: " + button.GetGuid().ToString());
-        if (editSortFolderBtn.IsChecked ?? false)
-        {
-            ShowSortFolderDialog(button.GetSortFolderModel());
-        }
-        else
-        {
-            if (_activeFileModel == null) return;
-            _activeFileModel.SetMoveAction();
-            _activeFileModel.NewFilePath = button.GetFolderPath();
-            UpdateFileInfo();
+        //string method = "SortButtonClick";
+        //System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        //SortButton button = sender as SortButton;
+        //if (button == null) return;
+        //System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Sort Folder Clicked with guid: " + button.GetGuid().ToString());
+        //if (editSortFolderBtn.IsChecked ?? false)
+        //{
+        //    ShowSortFolderDialog(button.GetSortFolderModel());
+        //}
+        //else
+        //{
+        //    if (_activeFileModel == null) return;
+        //    _activeFileModel.SetMoveAction();
+        //    _activeFileModel.NewFilePath = button.GetFolderPath();
+        //    UpdateFileInfo();
 
-        }
+        //}
     }
 
     public async void ExecuteButton_Click(object sender, RoutedEventArgs args)
@@ -260,30 +250,30 @@ public partial class MainView : UserControl
 
     public void NameChangedEvent(object sender, RoutedEventArgs args)
     {
-        string method = "NameChangedEvent";
-        System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        if (_activeFileModel != null)
-        {
-            string extension = _activeFileModel.GetFileType();
+        //string method = "NameChangedEvent";
+        //System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        //if (_activeFileModel != null)
+        //{
+        //    string extension = _activeFileModel.GetFileType();
 
-            if (!fileNameTB.Text.EndsWith(extension))
-            {
-                fileNameTB.Text = fileNameTB.Text.Trim() + extension;
-            }
+        //    if (!fileNameTB.Text.EndsWith(extension))
+        //    {
+        //        fileNameTB.Text = fileNameTB.Text.Trim() + extension;
+        //    }
 
-            if (fileNameTB.Text.Trim() == _activeFileModel.FileName)
-            {
-                _activeFileModel.NewFileName = "";
+        //    if (fileNameTB.Text.Trim() == _activeFileModel.FileName)
+        //    {
+        //        _activeFileModel.NewFileName = "";
 
-            }
-            else
-            {
-                _activeFileModel.NewFileName = fileNameTB.Text.Trim();
-            }
+        //    }
+        //    else
+        //    {
+        //        _activeFileModel.NewFileName = fileNameTB.Text.Trim();
+        //    }
 
 
-            System.Diagnostics.Debug.WriteLine(className + ":" + method + ": File Name " + _activeFileModel.NewFileName);
-        }
+        //    System.Diagnostics.Debug.WriteLine(className + ":" + method + ": File Name " + _activeFileModel.NewFileName);
+        //}
     }
 
     public void FileIndexUp(object sender, RoutedEventArgs args)
@@ -390,20 +380,20 @@ public partial class MainView : UserControl
 
     public void SetFileIndexNumber(int index)
     {
-        string method = "SetFileIndexNumber";
-        System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        if (_fileBaseController.GetFileCount() == 0)
-        {
-            index = 0;
-        }
-        _index = index;
-        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-        {
-            fileIndexNumber.Content = index;
-        });
-        System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Sets FileIndexNumer to " + index);
-        UpdateFileInfo();
-        LoadBrowser(index);
+        //string method = "SetFileIndexNumber";
+        //System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        //if (_fileBaseController.GetFileCount() == 0)
+        //{
+        //    index = 0;
+        //}
+        //_index = index;
+        //Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        //{
+        //    fileIndexNumber.Content = index;
+        //});
+        //System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Sets FileIndexNumer to " + index);
+        //UpdateFileInfo();
+        //LoadBrowser(index);
     }
 
     public void UpdateFileInfo()
@@ -417,29 +407,29 @@ public partial class MainView : UserControl
             if (valid)
             {
 
-                FileBaseModel file = _fileBaseController.GetFile(_index - 1);
-                fileNameTB.Text = file.FileName;
-                filePathTB.Text = file.FilePath;
-                fileTypeTB.Text = file.FileType;
-                fileHashTB.Text = file.FileContentHashValue;
-                fileSizeTB.Text = file.FileSize;
-                fileActionTB.Text = file.Action;
-                _activeFileModel = file;
-                System.Diagnostics.Debug.WriteLine(className + ":" + method + " Set Active Filemodel to " + _activeFileModel.FileName);
-                browser.IsVisible = true;
+                //FileBaseModel file = _fileBaseController.GetFile(_index - 1);
+                //fileNameTB.Text = file.FileName;
+                //filePathTB.Text = file.FilePath;
+                //fileTypeTB.Text = file.FileType;
+                //fileHashTB.Text = file.FileContentHashValue;
+                //fileSizeTB.Text = file.FileSize;
+                //fileActionTB.Text = file.Action;
+                //_activeFileModel = file;
+                //System.Diagnostics.Debug.WriteLine(className + ":" + method + " Set Active Filemodel to " + _activeFileModel.FileName);
+                //browser.IsVisible = true;
             }
             else
             {
-                fileNameTB.Text = "";
-                filePathTB.Text = "";
-                fileTypeTB.Text = "";
-                fileHashTB.Text = "";
-                fileSizeTB.Text = "";
-                fileActionTB.Text = "";
-                _activeFileModel = null;
-                System.Diagnostics.Debug.WriteLine(className + ":" + method + " Set Active Filemodel to null");
-                browser.Address = "";
-                browser.IsVisible = false;
+                //fileNameTB.Text = "";
+                //filePathTB.Text = "";
+                //fileTypeTB.Text = "";
+                //fileHashTB.Text = "";
+                //fileSizeTB.Text = "";
+                //fileActionTB.Text = "";
+                //_activeFileModel = null;
+                //System.Diagnostics.Debug.WriteLine(className + ":" + method + " Set Active Filemodel to null");
+                //browser.Address = "";
+                //browser.IsVisible = false;
             }
         });
     }
@@ -458,13 +448,13 @@ public partial class MainView : UserControl
 
     public void SetFileMaxNumber(int max)
     {
-        string method = "SetFileMaxNumber";
-        System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-        {
-            fileMaxNumber.Content = "" + max;
-        });
-        System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Sets MaxFileNumer to " + max);
+        //string method = "SetFileMaxNumber";
+        //System.Diagnostics.Debug.WriteLine(className + ":" + method);
+        //Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        //{
+        //    fileMaxNumber.Content = "" + max;
+        //});
+        //System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Sets MaxFileNumer to " + max);
     }
 
     #endregion
