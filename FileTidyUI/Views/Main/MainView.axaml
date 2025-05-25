@@ -21,10 +21,10 @@
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="38" />
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="fileType" Grid.Column="0" Margin="1" VerticalAlignment="Center" Width="100" ToolTip.Tip="Select File Type" MaxDropDownHeight="100" SelectionChanged="FileTypeIndexChanged">
+        <ComboBox x:Name="fileType" ItemsSource="{Binding FileTypeKeys}" SelectedItem="{Binding SelectedFileTypeKey, Mode=TwoWay}" Grid.Column="0" Margin="1" VerticalAlignment="Center" Width="100" ToolTip.Tip="Select File Type" MaxDropDownHeight="100">
         </ComboBox>
-        <TextBox x:Name="chaosFolderPathTB" Grid.Column="1" Margin="1" Watermark="Chaos Folder" VerticalAlignment="Center" IsReadOnly="True" IsHitTestVisible="False"></TextBox>
-        <Button x:Name="choasFolderSelectBtn" Click="FolderSelectClick" Grid.Column="2" Margin="1" ToolTip.Tip="Select Chaos Folder" VerticalAlignment="Center">
+        <TextBox x:Name="chaosFolderPathTB" Text="{Binding ChaosFolderPath}"  Grid.Column="1" Margin="1" Watermark="Chaos Folder" VerticalAlignment="Center" IsReadOnly="True" IsHitTestVisible="False"></TextBox>
+        <Button x:Name="choasFolderSelectBtn" Command = "{Binding SelectChaosFolderCommand}" CommandParameter="{Binding $parent[Window]}" Grid.Column="2" Margin="1" ToolTip.Tip="Select Chaos Folder" VerticalAlignment="Center">
           <PathIcon Data="{StaticResource open_regular}"  />
         </Button>
       </Grid>
@@ -44,9 +44,9 @@
         </Button>
       </Grid>
     </Border>
-    <TabControl x:Name="mainTabControl" Margin="0">
+    <TabControl x:Name="mainTabControl">
       <TabItem Header="Sorting" x:Name="sortingFilesTab">
-        <views:SortView></views:SortView>
+          <views:SortView></views:SortView>
       </TabItem>
       <TabItem Header="Dupplicates" x:Name="dupeFileTab">
         <views:DupplicateView></views:DupplicateView>

@@ -25,4 +25,8 @@
     <ProjectReference Include="..\FileTidyBase\src\FileTidyBase.csproj" />
     <ProjectReference Include="..\FileTidyDatabase\FileTidyDatabase.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Controls\" />
+  </ItemGroup>
 </Project>

@@ -38,15 +38,6 @@ public partial class MainView : UserControl
 
     private bool _isEditSortFolderMode = false;
 
-    private Dictionary<string, List<string>> _fileTypes = new()
-    {
-        { "Img", new List<string>{".PNG" , ".WEBP", ".JPG", ".JPEG"} },
-        { "PDF", new List<string>{".PDF"} },
-        { "Video", new List<string>{".MP4", ".AVI", ".MKV"} },
-        { "Text", new List<string>{".TXT"} },
-        { "All", new List<string>{".PNG" , ".WEBP", ".JPG", ".PDF", ".MP4", ".AVI", ".MKV", ".TXT" } }
-    };
-
     private string _chaosFolderPath = "";
     private List<string> _allowedFileTypes = new();
 
@@ -57,27 +48,10 @@ public partial class MainView : UserControl
     {
         InitializeComponent();
 
-        FillFormatCombobox();
+
 
     }
 
-    private void FillFormatCombobox()
-    {
-        ComboBox? filetypes = this.FindControl<ComboBox>("fileType");
-
-        if (filetypes == null) return;
-
-        filetypes.Items.Clear();
-
-        foreach (var fileType in _fileTypes.Keys)
-        {
-            ComboBoxItem item = new ComboBoxItem()
-            {
-                Content = fileType
-            };
-            filetypes.Items.Add(item);
-        }
-    }
 
     private void SetBrowserWidthAndHeight()
     {
@@ -111,30 +85,6 @@ public partial class MainView : UserControl
 
 
     #region handler
-    public async void FolderSelectClick(object sender, RoutedEventArgs args)
-    {
-
-        string method = "FolderSelectClick";
-        System.Diagnostics.Debug.WriteLine(className + ":" + method);
-        var topLevel = TopLevel.GetTopLevel(this);
-
-        // Start async operation to open the dialog.
-        System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Open Dialog");
-        var folder = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-        {
-            Title = "Open Chaos Folder",
-            AllowMultiple = false
-        });
-
-
-        System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Number Folder Selected " + folder.Count);
-
-        if (folder.Count >= 1)
-        {
-            System.Diagnostics.Debug.WriteLine(className + ":" + method + ":" + "Folder Selected " + folder[0].Path.AbsolutePath);
-            SetChaosFolderName(folder[0].Path.AbsolutePath);
-        }
-    }
 
     public async void AddSortFolderClick(object sender, RoutedEventArgs args)
     {
@@ -316,10 +266,10 @@ public partial class MainView : UserControl
         System.Diagnostics.Debug.WriteLine(className + ":" + method);
         string selected = (fileType.SelectedValue as ComboBoxItem)?.Content?.ToString() ?? "";
         System.Diagnostics.Debug.WriteLine(className + ":" + method + ": Filetype selected " + selected);
-        if (_fileTypes.TryGetValue(selected, out List<string>? values))
-        {
-            SetAllowedFileTypes(values);
-        }
+        //if (_fileTypes.TryGetValue(selected, out List<string>? values))
+        //{
+        //    SetAllowedFileTypes(values);
+        //}
     }
     #endregion
 

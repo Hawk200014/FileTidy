@@ -3,8 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:FileTidyUI.ViewModels"
+             xmlns:controls="clr-namespace:FileTidyUI.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="FileTidyUI.Views.Main.SettingsView"
+             
              x:DataType="vm:SettingsViewModel">
-  Welcome to Avalonia!
+  <WrapPanel>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Center">
+      <CheckBox Content="Analyse Child Folders" FlowDirection="RightToLeft" />
+    </StackPanel>
+  </WrapPanel>
 </UserControl>
