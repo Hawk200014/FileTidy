@@ -8,12 +8,13 @@ using System.IO;
 using FileTidyDatabase;
 using Microsoft.EntityFrameworkCore;
 using FileTidyBase.Controller;
+using FileTidyUI.ViewModels;
 
 namespace FileTidyUI.Desktop;
 
 class Program
 {
-    private static IServiceProvider _serviceProvider;
+    public static IServiceProvider ServiceProvider;
 
     [STAThread]
     public static void Main(string[] args)
@@ -40,7 +41,15 @@ class Program
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
             AddTransients(serviceCollection);
-            _serviceProvider = serviceCollection.BuildServiceProvider();
+            ServiceProvider = serviceCollection.BuildServiceProvider();
+            App.ServiceProvider = ServiceProvider;
+
+            // After building the service provider
+            using (var scope = ServiceProvider.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<FileTidyDbContext>();
+                dbContext.Database.Migrate(); // Applies migrations and creates the database if needed
+            }
 
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args);
@@ -58,7 +67,8 @@ class Program
     private static void AddTransients(ServiceCollection serviceCollection)
     {
         serviceCollection.AddTransient<SortFolderController>();
-
+        serviceCollection.AddTransient<MainViewModel>();
+        serviceCollection.AddTransient<SettingsController>();
     }
 
     private static void ConfigureServices(IServiceCollection services)
@@ -71,6 +81,9 @@ class Program
 
         services.AddDbContext<FileTidyDbContext>(options =>
             options.UseSqlite(connectionString));
+
+        services.AddSingleton<FileBaseController>();
+        services.AddSingleton<SettingsController>();
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.

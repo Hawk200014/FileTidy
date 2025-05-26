@@ -4,12 +4,22 @@ using Avalonia.Markup.Xaml;
 
 using FileTidyUI.ViewModels;
 using FileTidyUI.Views.Main;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace FileTidyUI;
 
 public partial class App : Application
 {
+    private MainViewModel _mainViewModel;
+
+    public static IServiceProvider ServiceProvider { get; set; }
+
+    public App()
+    {
+        _mainViewModel = ServiceProvider.GetService<MainViewModel>() ?? throw new InvalidOperationException("MainViewModel not found in service provider.");
+    }
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -26,14 +36,14 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = _mainViewModel
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = _mainViewModel
             };
         }
 

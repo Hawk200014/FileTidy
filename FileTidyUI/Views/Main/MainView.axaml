@@ -39,7 +39,7 @@
         </Grid.ColumnDefinitions>
         <Label x:Name="progressBarLbl" Grid.Column="0" Content="Idle" VerticalAlignment="Center" IsVisible="False"></Label>
         <ProgressBar Grid.Column="1" x:Name="progressBar" Height="28" Margin="2" Minimum="0" Maximum="100" Value="0" IsIndeterminate="True" VerticalAlignment="Center" IsVisible="False"/>
-        <Button Click="ExecuteButton_Click" x:Name="executeBtn" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="2" ToolTip.Tip="Execute Action">
+        <Button Command="{Binding ExecuteButtonCommand}" x:Name="executeBtn" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="2" ToolTip.Tip="Execute Action">
           <PathIcon Data="{StaticResource rocket_regular}"  />
         </Button>
       </Grid>

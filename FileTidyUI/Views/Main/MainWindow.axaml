@@ -7,6 +7,9 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="FileTidyUI.Views.Main.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="FileTidyUI">
-        <views:MainView />
+        x:DataType="vm:MainViewModel"
+        Title="FileTidyUI"
+        Width="{Binding WindowWidth, Mode=TwoWay}"
+        Height="{Binding WindowHeight, Mode=TwoWay}">
+  <views:MainView />
 </Window>
