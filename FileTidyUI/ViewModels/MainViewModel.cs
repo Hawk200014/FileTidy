@@ -17,18 +17,19 @@ namespace FileTidyUI.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    public int WindowWidth { get; set; } = 800;
-    public int WindowHeight { get; set; } = 600;
-    public PixelPoint WindowPosition { get; set;  } = new PixelPoint(100, 100);
+
 
 
     private static ILogger Log => Serilog.Log.ForContext<MainViewModel>();
     public ReactiveCommand<Window, Unit> SelectChaosFolderCommand { get; } 
     public ReactiveCommand<Unit,Unit> ExecuteButtonCommand { get; }
 
+    public ReactiveCommand<Unit, Unit> LoadFilesCommand { get; }
+
     private readonly FileBaseController _fileBaseController;
     private readonly SettingsController _settingsController;
     private string _chaosFolderPath = "";
+    private FileBaseModel? _activeModel;
 
     private Dictionary<string, List<string>> _fileTypes = new()
     {
@@ -61,8 +62,30 @@ public class MainViewModel : ViewModelBase
         _settingsController = settingsController;
         ExecuteButtonCommand = ReactiveCommand.CreateFromTask(ExecuteButtoAsync);
         SelectChaosFolderCommand = ReactiveCommand.CreateFromTask<Window>(SelectChaosFolderAsync);
+        LoadFilesCommand = ReactiveCommand.CreateFromTask(LoadFiles);
 
         LoadWindowProperties();
+    }
+
+    private async Task LoadFiles()
+    {
+        Log.Here().Debug("LoadFiles called");
+        if (string.IsNullOrEmpty(ChaosFolderPath))
+        {
+            Log.Here().Warning("Chaos folder path is empty. Cannot load files.");
+            return;
+        }
+        Log.Here().Debug("Loading files from chaos folder: " + ChaosFolderPath);
+        try
+        {
+            await _fileBaseController.LoadFilesAsync(ChaosFolderPath, _fileTypes[SelectedFileTypeKey]);
+            Log.Here().Information("Files loaded successfully from: " + ChaosFolderPath);
+            _activeModel = _fileBaseController.GetFile() // Update the active model after loading files
+        }
+        catch (Exception ex)
+        {
+            Log.Here().Error(ex, "Error loading files from chaos folder: " + ChaosFolderPath);
+        }
     }
 
 
@@ -94,32 +117,33 @@ public class MainViewModel : ViewModelBase
     {
 
         _fileBaseController.ExecuteActions();
-        LoadFiles();
+        await LoadFiles();
     }
 
-    public void LoadFiles()
-    {
 
-    }
 
     #region Window Position and Size
 
+    public int WindowWidth { get; set; } = 800;
+    public int WindowHeight { get; set; } = 600;
+    public PixelPoint WindowPosition { get; set; } = new PixelPoint(100, 100);
+
     public void SaveWindowPosition(PixelPoint position)
     {
-        _settingsController.SetSettingAsync("WindowPositionX", position.X.ToString()).Wait();
-        _settingsController.SetSettingAsync("WindowPositionY", position.Y.ToString()).Wait();
+        _settingsController.SetSettingAsync(ESettings.WindowPositionX.ToString(), position.X.ToString()).Wait();
+        _settingsController.SetSettingAsync(ESettings.WindowPositionY.ToString(), position.Y.ToString()).Wait();
     }
 
     public void SaveWindowSize(double width, double height)
     {
-        _settingsController.SetSettingAsync("WindowWidth", width.ToString()).Wait();
-        _settingsController.SetSettingAsync("WindowHeight", height.ToString()).Wait();
+        _settingsController.SetSettingAsync(ESettings.WindowWidth.ToString(), width.ToString()).Wait();
+        _settingsController.SetSettingAsync(ESettings.WindowHeight.ToString(), height.ToString()).Wait();
     }
 
     public PixelPoint GetSavedWindowPosition()
     {
-        string x = _settingsController.GetSettingAsync("WindowPositionX").Result;
-        string y = _settingsController.GetSettingAsync("WindowPositionY").Result;
+        string x = _settingsController.GetSettingAsync(ESettings.WindowPositionX.ToString()).Result;
+        string y = _settingsController.GetSettingAsync(ESettings.WindowPositionY.ToString()).Result;
         if (int.TryParse(x, out int posX) && int.TryParse(y, out int posY))
         {
             return new PixelPoint(posX, posY);
@@ -130,8 +154,8 @@ public class MainViewModel : ViewModelBase
 
     public (double Width, double Height) GetSavedWindowSize()
     {
-        string width = _settingsController.GetSettingAsync("WindowWidth").Result;
-        string height = _settingsController.GetSettingAsync("WindowHeight").Result;
+        string width = _settingsController.GetSettingAsync(ESettings.WindowWidth.ToString()).Result;
+        string height = _settingsController.GetSettingAsync(ESettings.WindowHeight.ToString()).Result;
         if (double.TryParse(width, out double w) && double.TryParse(height, out double h))
         {
             return (w, h);

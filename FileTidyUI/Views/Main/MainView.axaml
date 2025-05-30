@@ -19,7 +19,8 @@
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="100" />
           <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="38" />
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <ComboBox x:Name="fileType" ItemsSource="{Binding FileTypeKeys}" SelectedItem="{Binding SelectedFileTypeKey, Mode=TwoWay}" Grid.Column="0" Margin="1" VerticalAlignment="Center" Width="100" ToolTip.Tip="Select File Type" MaxDropDownHeight="100">
         </ComboBox>
@@ -27,6 +28,7 @@
         <Button x:Name="choasFolderSelectBtn" Command = "{Binding SelectChaosFolderCommand}" CommandParameter="{Binding $parent[Window]}" Grid.Column="2" Margin="1" ToolTip.Tip="Select Chaos Folder" VerticalAlignment="Center">
           <PathIcon Data="{StaticResource open_regular}"  />
         </Button>
+        <Button x:Name="LoadFiles" Command="{Binding LoadFilesCommand}" Grid.Column="3" Margin="1" ToolTip.Tip="Load Files" VerticalAlignment="Center" Content="Load"/>
       </Grid>
     </Border>
     <Border Height="38" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Bottom">

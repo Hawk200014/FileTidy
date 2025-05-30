@@ -1,4 +1,5 @@
 ﻿using FileTidyBase.Models;
+using FileTidyDatabase;
 using Serilog; // Add this using directive
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,16 @@ namespace FileTidyBase.Controller
         /// </summary>
         private List<FileBaseModel> _files { get; set; } = new List<FileBaseModel>();
 
+        private SettingsController _settingsController;
+        private int _selectIndex = 0;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FileBaseController"/> class.
         /// </summary>
-        public FileBaseController()
+        public FileBaseController(SettingsController settingsController)
         {
             Log.Here().Debug("Constructing FileBaseController");
+            this._settingsController = settingsController;
         }
 
         /// <summary>
@@ -211,19 +216,79 @@ namespace FileTidyBase.Controller
         /// <returns>The <see cref="FileBaseModel"/> at the specified index.</returns>
         /// <exception cref="IndexOutOfRangeException">Thrown if <paramref name="index"/> is less than 0 or greater than or equal to the number of files in the
         /// collection.</exception>
-        public FileBaseModel GetFile(int index)
+        public FileBaseModel? GetFile()
         {
-            Log.Here().Debug("Retrieving file at index: {Index}", index);
-            if (index >= 0 && index < _files.Count)
+            if (_selectIndex == -1) return null;
+            Log.Here().Debug("Retrieving file at index: {Index}", _selectIndex);
+            if (_selectIndex >= 0 && _selectIndex < _files.Count)
             {
-                Log.Here().Debug("File retrieved: {FilePath}", _files[index].FilePath);
-                return _files[index];
+                Log.Here().Debug("File retrieved: {FilePath}", _files[_selectIndex].FilePath);
+                return _files[_selectIndex];
             }
             else
             {
-                Log.Here().Fatal("Index out of range: {Index}", index);
+                Log.Here().Fatal("Index out of range: {Index}", _selectIndex);
                 throw new IndexOutOfRangeException("Index out of range");
             }
         }
+
+        public FileBaseModel? GetNextFile()
+        {
+            _selectIndex++;
+            if (_selectIndex == _files.Count)
+            {
+                _selectIndex = 0;
+            }
+
+            return GetFile();
+        }
+
+        public FileBaseModel? GetPreviousFile()
+        {
+            _selectIndex--;
+            if (_selectIndex < 0)
+            {
+                _selectIndex = _files.Count - 1;
+            }
+            return GetFile();
+        }
+
+        public async Task LoadFilesAsync(string chaosFolderPath, List<string> list)
+        {
+            bool searchChilds = _settingsController.GetSettingAsync(ESettings.SearchChildFolders.ToString()).Result == "true";
+
+            string[] files = Directory.GetFiles(chaosFolderPath, "*.*", searchChilds ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)
+                .Where(f => list.Contains(Path.GetExtension(f).ToLower())).ToArray();
+
+            Log.Here().Debug("Loading files from: {ChaosFolderPath}, SearchChilds: {SearchChilds}, FileCount: {FileCount}");
+
+            List<FileBaseModel> fileBaseModels = new List<FileBaseModel>();
+
+            foreach (var file in files)
+            {
+                try
+                {
+                    Log.Here().Debug("Adding file: {FilePath}", file);
+                    var fileModel = new FileBaseModel(file);
+                    fileBaseModels.Add(fileModel);
+                    await fileModel.GetFileInfo();
+                }
+                catch (Exception ex)
+                {
+                    Log.Here().Error(ex, "Error adding file: {FilePath}", file);
+                }
+            }
+
+            this._files = fileBaseModels;
+            if (_files.Count > 0)
+            {
+                _selectIndex = 0;
+                Log.Here().Debug("Files loaded successfully. Count: {Count}", _files.Count);
+            }
+            else
+            {
+                _selectIndex = -1;
+                Log.Here().Warning("No files found in the specified directory: {ChaosFolderPath}", chaosFolderPath);
+            }
+        }
     }
-}
