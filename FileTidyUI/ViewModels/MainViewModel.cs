@@ -80,7 +80,7 @@ public class MainViewModel : ViewModelBase
         {
             await _fileBaseController.LoadFilesAsync(ChaosFolderPath, _fileTypes[SelectedFileTypeKey]);
             Log.Here().Information("Files loaded successfully from: " + ChaosFolderPath);
-            _activeModel = _fileBaseController.GetFile() // Update the active model after loading files
+            _activeModel = _fileBaseController.GetFile(); // Update the active model after loading files
         }
         catch (Exception ex)
         {
